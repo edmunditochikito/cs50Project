@@ -9,7 +9,7 @@ jwt = JWTManager()
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:password@localhost/'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:password@localhost/clientes'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(hours=30)
