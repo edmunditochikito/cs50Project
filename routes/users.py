@@ -56,7 +56,11 @@ def login_POST():
         response = jsonify({
             "message": "Iniciaste sesión con éxito",
             "status": "success",
-            "url_for":"/"
+            "url_for":"/",
+            "tokens":{
+                "access":access_token,
+                "refresh":refresh_token
+            }
         })
         set_access_cookies(response, access_token)
         set_refresh_cookies(response, refresh_token)

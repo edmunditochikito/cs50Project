@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Iniciar Sesión</h2>
+    <form id="loginForm" method="POST" action="/Login" class="form-container bg-light p-4 rounded shadow-sm">
+        
+        <!-- Campo de Correo Electrónico -->
+        <div class="mb-4">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="Ingrese su correo electrónico">
+            </div>
+        </div>
+        
+        <!-- Campo de Contraseña -->
+        <div class="mb-4">
+            <label for="password" class="form-label">Contraseña</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" class="form-control" id="password" name="password" required placeholder="Ingrese su contraseña">
+                <span class="input-group-text">
+                    <i class="fas fa-eye" id="togglePassword" style="cursor: pointer;"></i>
+                </span>
+            </div>
+        </div>
+        
+        <!-- Botón de Iniciar Sesión -->
+        <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+    </form>
+
+    <!-- Enlace para registrar cuenta -->
+    <div class="text-center mt-3">
+        <p>¿No tienes una cuenta? <a href="/Register">Regístrate aquí</a></p>
+    </div>
+</div>
+
+<!-- Script para alternar visibilidad de la contraseña -->
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+</script>
+{% endblock %}

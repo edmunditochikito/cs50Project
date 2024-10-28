@@ -1,26 +1,116 @@
 /* Navbar custom styles */
+.navbar {
+    background-color: #343a40; /* Color oscuro para la barra de navegación */
+}
+
 .navbar-brand {
+    color: #ffc107 !important; /* Color dorado para la marca */
     font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffc107 !important;  /* Color dorado */
+}
+
+.nav-link {
+    color: #ffffff !important; /* Color blanco para los enlaces */
 }
 
 .nav-link:hover {
-    color: #ffc107 !important;
+    color: #ffc107 !important; /* Color dorado al pasar el mouse */
 }
 
 /* Footer custom styles */
 footer {
-    background-color: #343a40;
-    color: white;
+    background-color: #343a40; /* Color oscuro para el footer */
+    color: white; /* Color blanco para el texto */
 }
 
 /* Global Styles */
 body {
-    background-color: #f8f9fa;
-    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Color de fondo claro */
+    font-family: 'Arial', sans-serif; /* Fuente general */
 }
 
+/* Estilos para el contenedor */
 .container {
-    padding-top: 20px;
+    padding-top: 20px; /* Espaciado superior */
+    margin-top: 3rem; /* Añade espacio superior */
+}
+
+/* Estilos adicionales para el formulario */
+.form-wrapper {
+    max-width: 500px; /* Limita el ancho del formulario */
+    margin: 0 auto; /* Centra el formulario horizontalmente */
+    padding: 20px; /* Espaciado adicional */
+}
+
+.form-container {
+    background-color: #ffffff; /* Fondo blanco */
+    padding: 2rem; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
+}
+
+/* Estilo para el encabezado del formulario */
+h2 {
+    color: #007bff; /* Color azul de Bootstrap */
+}
+
+/* Botón de registro con efecto de hover */
+.btn-custom {
+    background-color: #007bff; /* Color azul de Bootstrap */
+    color: white;
+    border: none;
+    transition: transform 0.2s ease, background-color 0.3s ease; /* Efecto suave en el hover */
+}
+
+.btn-custom:hover {
+    background-color: #0056b3; /* Color más oscuro en el hover */
+    transform: scale(1.05); /* Aumenta el tamaño al pasar el mouse */
+}
+
+/* Iconos en el formulario */
+.input-group-text {
+    background-color: #007bff; /* Fondo azul para los iconos */
+    color: #ffffff; /* Color blanco para los iconos */
+    border: none; /* Sin bordes */
+}
+
+.input-group .form-control {
+    border-radius: 0 0.25rem 0.25rem 0; /* Bordes redondeados a la derecha */
+}
+
+.input-group .form-control:focus {
+    border-color: #007bff; /* Bordes azul en foco */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Sombra azul en foco */
+}
+
+/* Colores de feedback en caso de error o éxito */
+.input-error {
+    border-color: #dc3545; /* Rojo en caso de error */
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}
+
+.input-success {
+    border-color: #28a745; /* Verde en caso de éxito */
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+/* Estilo para mensajes de error */
+.error-message {
+    font-size: 0.8rem;
+    color: #dc3545;
+    display: none; /* Inicialmente oculto */
+}
+
+/* Muestra el mensaje de error si el campo tiene la clase de error */
+.input-error + .error-message {
+    display: block;
+}
+
+/* Estilo para el botón de mostrar/ocultar contraseña */
+#togglePassword {
+    cursor: pointer;
+    color: #ffffff;
+}
+
+#togglePassword:hover {
+    color: #ffffff;
 }
