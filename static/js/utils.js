@@ -20,7 +20,7 @@ const Toast = Swal.mixin({
 
   export function addDivAlert(message) {
     let div = document.createElement("div");
-    div.classList.add("has-danger");
+    div.classList.add("has-danger","col-12","text-danger");
     div.textContent = message;
     return div;
   }

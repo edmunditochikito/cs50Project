@@ -90,6 +90,14 @@ def refresh():
     set_access_cookies(response, new_access_token)
     return response
 
+@user.route("/whoAmI", methods=["GET"])
+@jwt_required() 
+def who_am_i():
+    current_user = get_jwt_identity() 
+    response = jsonify({"you are":current_user })
+    return response
+
+
 
 @user.route("/logout", methods=["POST"])
 @jwt_required()
@@ -102,6 +110,7 @@ def logout():
     except Exception as e:
         return jsonify({"message": f"Error al cerrar sesion {str(e)}", "status": "error"})
     
+
     
     
 def Log_history(user_id):
