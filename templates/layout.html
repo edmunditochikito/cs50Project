@@ -34,7 +34,7 @@
                     </li>
 
                     <!-- Condicional: Mostrar enlaces diferentes si el usuario está autenticado -->
-                    {% if current_user %}
+                    {% if user_logged_in %}
                         <li class="nav-item">
                             <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
                         </li>

@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         this.classList.toggle('fa-eye');
         this.classList.toggle('fa-eye-slash');
     });
+
   let form = document.querySelector("form");
   let inputs = document.querySelectorAll("input");
   
@@ -92,5 +93,3 @@ function passwordValidation(password) {
 
   showAlert(password.target, message);
 }
-
-
