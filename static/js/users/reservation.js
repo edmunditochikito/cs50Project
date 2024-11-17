@@ -1,3 +1,4 @@
+import {getCookie} from "../utils.js"
 document.addEventListener("DOMContentLoaded", () => {
   const reservationForm = document.getElementById("reservationForm");
 
@@ -63,12 +64,14 @@ document.addEventListener("DOMContentLoaded", () => {
           email_confirmation: emailConfirmation,
           table_number: tableNumber // Asegúrate de tener este campo en tu HTML
       };
+      const csrfToken = getCookie("csrf_access_token")
 
       try {
           const response = await fetch('/reservations', {
               method: 'POST',
               headers: {
-                  'Content-Type': 'application/json' // Especifica que se envían datos JSON
+                  'Content-Type': 'application/json', 
+                  "X-CSRF-TOKEN": csrfToken,          // Especifica que se envían datos JSON
               },
               body: JSON.stringify(reservationData) // Convierte el objeto a JSON
           });
@@ -82,7 +85,9 @@ document.addEventListener("DOMContentLoaded", () => {
           alert('Reserva creada con éxito: ' + data.message); // Manejo de la respuesta
           reservationForm.reset(); // Opcional: reinicia el formulario
       } catch (error) {
+        console.log(error)
           alert('Error al crear reserva: ' + error.message);
+          
       }
   });
 });

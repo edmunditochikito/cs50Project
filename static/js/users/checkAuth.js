@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Evita la acción predeterminada del enlace
         event.preventDefault();
 
-        // Lógica para verificar si el usuario está autenticado
+        //  verificar si el usuario está autenticado
         
         let isAuthenticated= getCookie("csrf_access_token")
         
