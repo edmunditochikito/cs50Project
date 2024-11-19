@@ -12,7 +12,7 @@ class Dish(db.Model):
     categories_id = db.Column(db.Integer, db.ForeignKey("categories.id"), nullable=False)
 
     # Relación con Category
-    
+    category = db.relationship("Category", backref="dishes")
 
     def __init__(self, name, price, description, categories_id, image=None):
         self.name = name
@@ -28,7 +28,7 @@ class Dish(db.Model):
             "price": float(self.price),  # Convertir a float si es Decimal
             "description": self.description,
             "image": self.image,
-            "categories_id":self.categories_id
+            "categories_id": self.categories_id
         }
 
     def save(self):
@@ -46,3 +46,8 @@ class Dish(db.Model):
         except Exception as e:
             db.session.rollback()
             raise e
+
+    # Otros métodos de la clase Dish aquí
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()

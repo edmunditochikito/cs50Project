@@ -22,3 +22,12 @@ class Config:
     JWT_COOKIE_CSRF_PROTECT = True
     JWT_CSRF_METHODS=['POST', 'PUT', 'PATCH', 'DELETE']
  
+       # Configuración para subidas de archivos
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'uploads')
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+    # Verifica que la carpeta de uploads exista
+    @staticmethod
+    def ensure_upload_folder_exists():
+        if not os.path.exists(Config.UPLOAD_FOLDER):
+            os.makedirs(Config.UPLOAD_FOLDER)
