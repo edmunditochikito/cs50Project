@@ -1,42 +1,45 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Inicio - Restaurante Sabores Únicos
+Menú Principal
 {% endblock %}
 
 {% block content %}
-
-<!-- Hero Section -->
-<section id="hero" class="jumbotron text-center bg-primary text-white py-5">
-    <h1 class="display-4">Bienvenido a Restaurante Sabores Únicos</h1>
-    <p class="lead">¡Descubre sabores que deleitarán tus sentidos!</p>
+<section id="hero">
+    <div class="container text-center">
+        <h1>Bienvenido a Nuestro Restaurante</h1>
+        <p>Explora nuestro menú y disfruta de la mejor comida.</p>
+    </div>
 </section>
 
-<!-- Menú del Restaurante -->
-<section id="menu" class="container mt-5">
-    <h1 class="text-center mb-4">MENÚ DEL RESTAURANTE "SABORES ÚNICOS"</h1>
-
-    {% for category, items in menu.items() %}
-    <!-- Sección dinámica para cada categoría -->
-    <section id="{{ category }}" class="menu-section mt-5">
-        <h2 class="text-center">{{ category | capitalize }}</h2>
-        <div class="row">
-            {% for item in items %}
-            <div class="col-sm-6 col-md-4 mb-4">
-                <div class="card menu-card" onclick="toggleCardInfo(this)">
-                    <img src="{{ url_for('static', filename='images/' + item.image) }}" class="card-img-top img-fluid" alt="{{ item.title }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ item.title }}</h5>
-                        <p class="card-text">{{ item.description }}</p>
-                        <p class="menu-price">Precio: ${{ item.price }}</p>
-                    </div>
+<main class="container">
+    {% if categorized_dishes %}
+        {% for category, dishes in categorized_dishes.items() %}
+            <section id="{{ category | lower | replace(' ', '-') }}" class="menu-section">
+                <h2>{{ category }}</h2>
+                <div class="row">
+                    {% for dish in dishes %}
+                        <div class="col-md-4">
+                            <div class="card">
+                                {% if dish.image %}
+                                    <img src="{{ dish.image }}" class="card-img-top" alt="{{ dish.name }}">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h3 class="card-title">{{ dish.name }}</h3>
+                                    <p class="card-text">{{ dish.description }}</p>
+                                    <p class="card-text">
+                                        <strong>Precio:</strong> ${{ dish.price }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-    {% endfor %}
-</section>
-
+            </section>
+        {% endfor %}
+    {% else %}
+        <p class="text-center">No hay platillos disponibles en este momento.</p>
+    {% endif %}
+</main>
 <script type="module" src="{{ url_for('static', filename='js/users/index.js') }}"></script>
 {% endblock %}

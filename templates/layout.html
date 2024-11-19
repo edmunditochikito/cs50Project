@@ -12,56 +12,58 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Restaurante Delicioso</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/reservations" id="reservations-link"><i class="fas fa-utensils"></i> Reservaciones</a>
-                    </li>
-                    
-                    {% if user_logged_in %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/profile"><i class="fas fa-user"></i> Perfil</a>
-                        </li>
+   <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Restaurante Delicioso</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><i class="fas fa-home"></i> Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/reservations" id="reservations-link"><i class="fas fa-utensils"></i> Reservaciones</a>
+                </li>
 
-                        <!-- Solo visible para el administrador -->
-                        {% if current_user == 'Administrator' %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin"><i class="fas fa-user-shield"></i> Administración</a>
-                            </li>
-                            
-                            
-                        {% endif %}
+                {% if user_logged_in %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile"><i class="fas fa-user"></i> Perfil</a>
+                    </li>
 
+                    <!-- Solo visible para el administrador -->
+                    {% if current_user.role == 'administrator' %}
                         <li class="nav-item">
-                            <!-- Formulario para cerrar sesión -->
-                            <form id="logout-form" action="/logout" method="POST" style="display: inline;">
-                                <button type="submit" class="nav-link btn btn-link" style="text-decoration: none; color: inherit;">
-                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                                </button>
-                            </form>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Register"><i class="fas fa-user-plus"></i> Registrarse</a>
+                            <a class="nav-link" href="{{ url_for('admin.manage_dishes') }}"><i class="fas fa-user-shield"></i> Administración</a>
                         </li>
                     {% endif %}
-                </ul>
-            </div>
+                        
+                   
+
+                    <!-- Formulario para cerrar sesión -->
+                    <li class="nav-item">
+                        <form id="logout-form" action="/logout" method="POST" style="display: inline;">
+                            <button type="submit" class="nav-link btn btn-link" style="text-decoration: none; color: inherit;">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Register"><i class="fas fa-user-plus"></i> Registrarse</a>
+                    </li>
+                {% endif %}
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
+
+
 
     <!-- Contenido principal -->
     <div class="container mt-4">

@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Platillos del Menú
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-4">Platillos del Menú</h1>
+
+<!-- Tabla para mostrar los platillos -->
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Categoría</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dish in dishes %}
+        <tr>
+            <td>{{ dish.name }}</td>
+            <td>{{ dish.description }}</td>
+            <td><strong>${{ dish.price }}</strong></td>
+            <td>{{ dish.category }}</td>
+            <td>
+                <form action="{{ url_for('admin.delete_dish', dish_id=dish.id) }}" method="POST">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -16,7 +16,7 @@ def view_profile():
         user_id = get_jwt_identity()
         
         # Consultar el usuario en la base de datos usando el user_id
-        user = User.query.get(user_id["user_id"])
+        user = User.query.get(user_id["id"])
         
         if user is None:
             return jsonify({"message": "Usuario no encontrado"}), 404
