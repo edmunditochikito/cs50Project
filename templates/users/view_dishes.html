@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Platillos del Menú
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Platillos del Menú</h1>
+    <a href="{{ url_for('admin.add_dish') }}" class="btn btn-success mb-3">Agregar Platillo</a>
+
+    <!-- Tabla para mostrar los platillos -->
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dish in dishes %}
+            <tr>
+                <td>{{ dish.name }}</td>
+                <td>{{ dish.description }}</td>
+                <td>${{ dish.price }}</td>
+                <td>
+                    <!-- Botón Editar -->
+                    <a href="{{ url_for('admin.edit_dish', dish_id=dish.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                    
+                    <!-- Botón Eliminar -->
+                    <form action="{{ url_for('admin.delete_dish', dish_id=dish.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

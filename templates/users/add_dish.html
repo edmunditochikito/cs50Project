@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Agregar Platillo - Administrador
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Agregar Platillo</h2>
+    <form id="addDishForm">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre del Platillo</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Precio</label>
+            <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Descripción</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">Categoría</label>
+            <input type="text" class="form-control" id="category" name="category" required>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Nombre del Archivo de Imagen</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Platillo</button>
+    </form>
+</div>
+<script type="module" src="{{ url_for('static', filename='js/users/add_dish.js') }}"></script>
+{% endblock %}

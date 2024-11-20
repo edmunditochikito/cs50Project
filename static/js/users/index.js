@@ -16,3 +16,5 @@ document.querySelectorAll('.card').forEach(card => {
         openCard = card.classList.contains('show') ? card : null;
     });
 });
+
+

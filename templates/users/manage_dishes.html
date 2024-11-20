@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Administrar Platillos
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5" id="admin-container">
+    <div class="card shadow-sm p-4">
+    <h1 class="text-center mb-4">Administrar Platillos</h1>
+    <ul class="list-unstyled text-center">
+        <li class="mb-3">
+            <a href="{{ url_for('admin.view_dishes') }}" class="btn btn-primary btn-lg px-4">
+                <i class="fas fa-eye"></i> Ver Platillos
+            </a>
+            <a href="{{ url_for('admin.add_dish') }}" class="btn btn-success btn-lg px-4">
+                <i class="fas fa-plus"></i> Agregar Platillo
+            </a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
