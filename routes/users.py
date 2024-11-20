@@ -25,6 +25,7 @@ def register_POST():
         new_user.save()
         return jsonify({"message":"Usuario Registrado correctamente, Redirigiendo al Login","status":"success"})
     except Exception as e:
+        print(e)
         return jsonify({"message":f"El campo {str(e)} esta vacio","status":"error"})
         
         
@@ -50,7 +51,7 @@ def login_POST():
     
     if check_user and (check_user.check_password_hash(user_data.password)):
         
-        Log_history(check_user.user_id)
+        Log_history(check_user.id)
         access_token = create_access_token(identity=check_user.serialize())
         refresh_token = create_refresh_token(identity=check_user.serialize())
         response = jsonify({

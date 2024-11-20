@@ -4,9 +4,9 @@ from datetime import datetime,timezone
 from werkzeug.security import generate_password_hash,check_password_hash
 
 class User(db.Model):
-    __tablename__ = 'Users'
+    __tablename__ = 'users'
     
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
@@ -23,7 +23,7 @@ class User(db.Model):
 
     def serialize(self):
         return {
-            'user_id': self.user_id,
+            'id': self.id,
             'name': self.name,
             'email': self.email,
             'phone': self.phone,
@@ -53,4 +53,4 @@ class User(db.Model):
             db.session.rollback()
             raise e
     
-    
+

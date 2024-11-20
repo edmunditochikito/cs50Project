@@ -1,10 +1,10 @@
 from config import db
-from datetime import datetime, timezone
+from datetime import datetime
 import pytz
 class Login_History(db.Model):
     __tablename__ = 'login_history'
-    login_id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # login_id
-    user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'), nullable=False)  # user_id (Foreign Key de la tabla Users)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # login_id
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) 
     login_date = db.Column(db.DateTime, default=datetime.now(pytz.utc), nullable=False)  # login_date
     
 
@@ -19,7 +19,7 @@ class Login_History(db.Model):
         nicaragua_tz = pytz.timezone('America/Managua')
         local_login_date = self.login_date.astimezone(nicaragua_tz)
         return {
-            'login_id': self.login_id,
+            'id': self.id,
             'user_id': self.user_id,
             'login_date':local_login_date.strftime("%Y-%m-%d %H:%M:%S")
         }
