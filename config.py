@@ -23,8 +23,9 @@ class Config:
     JWT_CSRF_METHODS=['POST', 'PUT', 'PATCH', 'DELETE']
  
        # Configuración para subidas de archivos
-    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'uploads')
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'images')
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024 
 
     # Verifica que la carpeta de uploads exista
     @staticmethod

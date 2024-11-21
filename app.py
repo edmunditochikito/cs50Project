@@ -5,6 +5,7 @@ from routes.index import index
 from routes.users import user
 from routes.dish import admin
 from routes.profile import profile_bp
+from routes.categories import category
 from config import jwt,db
 from flask_jwt_extended import verify_jwt_in_request,get_jwt_identity
 from routes.reservations import reservations_bp
@@ -12,6 +13,7 @@ from routes.reservations import reservations_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
+Config.ensure_upload_folder_exists()
 
 
 db.init_app(app)
@@ -23,6 +25,7 @@ app.register_blueprint(user)
 app.register_blueprint(admin)
 app.register_blueprint(profile_bp)
 app.register_blueprint(reservations_bp)
+app.register_blueprint(category)
 
 
 @app.context_processor

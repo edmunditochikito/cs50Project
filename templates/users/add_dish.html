@@ -5,9 +5,9 @@ Agregar Platillo - Administrador
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <h2>Agregar Platillo</h2>
-    <form id="addDishForm">
+    <form id="addDishForm" >
         <div class="mb-3">
             <label for="name" class="form-label">Nombre del Platillo</label>
             <input type="text" class="form-control" id="name" name="name" required>
@@ -22,13 +22,15 @@ Agregar Platillo - Administrador
         </div>
         <div class="mb-3">
             <label for="category" class="form-label">Categoría</label>
-            <input type="text" class="form-control" id="category" name="category" required>
+            <select name="category" class="form-control" id=""></select>
         </div>
+
         <div class="mb-3">
             <label for="image" class="form-label">Nombre del Archivo de Imagen</label>
-            <input type="file" class="form-control" id="image" name="image">
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
         </div>
-        <button type="submit" class="btn btn-primary">Agregar Platillo</button>
+        
+        <button class="btn btn-primary" type="submit">Agregar Platillo</button>
     </form>
 </div>
 <script type="module" src="{{ url_for('static', filename='js/users/add_dish.js') }}"></script>

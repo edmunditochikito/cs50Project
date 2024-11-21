@@ -1,16 +1,21 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash,jsonify
+from werkzeug.utils import secure_filename  
+import os
 from models.dish import Dish
 from config import db
 
 # Crear el Blueprint
 admin = Blueprint('admin', __name__, url_prefix='/admin')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+UPLOAD_FOLDER = 'static/images'
 
-# Ruta para la administración de platillos
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @admin.route('/manage', methods=['GET'])
 def manage_dishes():
-    """
-    Ruta para ver las opciones de administración de platillos
-    """
+
     return render_template('users/manage_dishes.html')
 
 # Ruta para ver todos los platillos
@@ -28,35 +33,41 @@ def add_dish():
     """
     Ruta para agregar un nuevo platillo
     """
-    if request.method == 'POST':
-        # Obtener los datos del formulario
-        name = request.form.get('name')
-        price = request.form.get('price')
-        description = request.form.get('description')
-        category = request.form.get('category')
-        image = request.form.get('image')
+    if request.method=="POST":
+        name = request.form.get("name")
+        price = request.form.get("price")
+        description = request.form.get("description")
+        category = request.form.get("categories_id")
+        image = request.files.get("image")
+        print(image)
+        print(request.form)
+        
+        # Validación del archivo
+        if image and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            # Crear el directorio si no existe
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-        # Validar campos requeridos
-        if not all([name, price, category]):
-            flash("Todos los campos obligatorios deben completarse", "danger")
-            return redirect(url_for('admin.add_dish'))
+            # Guardar el archivo en el servidor
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            image.save(file_path)
 
-        # Crear un nuevo platillo
-        new_dish = Dish(
-            name=name,
-            price=price,
-            description=description,
-            categories_id=category,
-            image=image
-        )
-        try:
+            # Guardar los datos del platillo en la base de datos
+            relative_path = f"{UPLOAD_FOLDER}/{filename}"
+            new_dish = Dish(
+                name=name,
+                price=price,
+                description=description,
+                categories_id=category,
+                image=relative_path
+            )
             new_dish.save()
-            flash("Platillo agregado exitosamente", "success")
-            return redirect(url_for('admin.view_dishes'))
-        except Exception as e:
-            flash(f"Error al guardar el platillo: {e}", "danger")
-            return redirect(url_for('admin.add_dish'))
-    return render_template('users/add_dish.html')
+
+            return jsonify({"message": "Platillo agregado exitosamente","status":"success"})
+        else:
+            return jsonify({"message": "Archivo no permitido o faltante","status":"error"}),
+    else:
+        return render_template('users/add_dish.html')
 
 # Ruta para editar un platillo
 @admin.route('/edit_dish/<int:dish_id>', methods=['GET', 'POST'])

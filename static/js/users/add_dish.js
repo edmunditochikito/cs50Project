@@ -1,72 +1,91 @@
-import { toastMessage,showAlert,} from "../utils.js";
+import { toastMessage, showAlert } from "../utils.js";
+document.addEventListener("DOMContentLoaded", async (e) => {
+  let select = document.querySelector("select");
+  let response = await axios.post("/categories");
+  let data = response.data;
+  data.forEach((category) => {
+    let option = document.createElement("option");
+    option.value = category.id;
+    option.text = category.name;
+    select.appendChild(option);
+  });
+
+  let form = document.querySelector("form");
+  let textarea = document.querySelector("textarea");
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("addDishForm");
+  let inputs = document.querySelectorAll("input");
+  inputs.forEach((input) => {
+    input.addEventListener("blur", valid);
+  });
+  textarea.addEventListener("blur", valid);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    // Capturar los valores de los campos
-    const name = document.getElementById("name");
-    const price = document.getElementById("price");
-    const description = document.getElementById("description");
-    const category = document.getElementById("category");
-    const image = document.getElementById("image");
-
-    let valid = true;
-
-    // Validar cada campo
-    if (!name.value.trim()) {
-      showAlert(name, "El nombre es obligatorio.");
-      valid = false;
-    } else {
-      showAlert(name, "");
-    }
-
-    if (!price.value || isNaN(price.value) || price.value <= 0) {
-      showAlert(price, "El precio debe ser un número positivo.");
-      valid = false;
-    } else {
-      showAlert(price, "");
-    }
-
-    if (!description.value.trim()) {
-      showAlert(description, "La descripción es obligatoria.");
-      valid = false;
-    } else {
-      showAlert(description, "");
-    }
-
-    if (!category.value.trim()) {
-      showAlert(category, "La categoría es obligatoria.");
-      valid = false;
-    } else {
-      showAlert(category, "");
-    }
-
-    if (!valid) {
-      toastMessage("error", "Por favor, corrige los errores antes de enviar.");
+  
+    let invalidFields = form.querySelectorAll(".is-invalid");
+    if (invalidFields.length > 0) {
+      invalidFields[0].focus();
       return;
     }
-
-    // Enviar datos al servidor
-    const formData = new FormData(form);
-    try {
-      const response = await fetch("/dishes/add", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        toastMessage("success", "Platillo agregado exitosamente.");
-        form.reset();
+  
+    let formData = new FormData(); 
+  
+    inputs.forEach((input) => {
+      if (input.type === "file") {
+        formData.append(input.id, input.files[0]); 
       } else {
-        toastMessage("error", result.message || "Ocurrió un error.");
+        formData.append(input.id, input.value); 
       }
-    } catch (error) {
-      toastMessage("error", "Error al enviar los datos.");
+    });
+  
+    formData.append(textarea.id, textarea.value); 
+    formData.append("categories_id", select.value);
+  
+    try {
+      let response = await axios.post("/admin/add_dish", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", 
+        },
+      });
+  
+      console.log(response.data); 
+    } catch (err) {
+      console.error(err); 
     }
   });
 });
+
+function valid(e) {
+  if (e.target.id == "price") {
+    let message = "";
+    if (!/^\d{1,4}$/.test(e.target.value)) {
+      console.log(e.target.value);
+      message = "Cantidad invalida";
+    }
+    showAlert(e.target, message);
+  }
+
+  if (e.target.id == "name") {
+    let message = "";
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.,;!?'"-]{1,40}$/.test(e.target.value)) {
+      message = "Nombre no valido";
+    }
+    showAlert(e.target, message);
+  }
+
+  if (e.target.id == "description") {
+    let message = "";
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.,;!?'"-]{1,160}$/.test(e.target.value)) {
+      message = "Descripcion no valida";
+    }
+    showAlert(e.target, message);
+  }
+  if (e.target.id == "image") {
+    let message = "";
+    if (e.target.value.trim() == "") {
+      message = "Debe seleccionar una imagen";
+    }
+    showAlert(e.target, message);
+  }
+}
