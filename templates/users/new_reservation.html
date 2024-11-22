@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="container">
+    <h2>Crear una nueva reservación</h2>
+
+    <!-- Mostrar los mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="alert alert-{{ messages[0][0] }}">
+          {{ messages[0][1] }}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+      <!-- Campo para la mesa -->
+      <div class="form-group">
+        <label for="table_id">Mesa:</label>
+        <select name="table_id" id="table_id" class="form-control">
+          <option value="">Selecciona una mesa</option>
+          {% for table in tables %}
+            <option value="{{ table.id }}">{{ table.name }} - {{ table.type }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Campo para la fecha de la reservación -->
+      <div class="form-group">
+        <label for="reservation_date">Fecha de la reservación:</label>
+        <input type="datetime-local" name="reservation_date" id="reservation_date" class="form-control" required>
+      </div>
+
+      <!-- Campo para el número de personas -->
+      <div class="form-group">
+        <label for="num_people">Número de personas:</label>
+        <input type="number" name="num_people" id="num_people" class="form-control" required min="1">
+      </div>
+
+      <!-- Campo para solicitudes especiales -->
+      <div class="form-group">
+        <label for="special_requests">Solicitudes especiales (opcional):</label>
+        <textarea name="special_requests" id="special_requests" class="form-control"></textarea>
+      </div>
+
+      <!-- Aceptación de términos y condiciones -->
+      <div class="form-group form-check">
+        <input type="checkbox" name="terms_and_conditions" id="terms_and_conditions" class="form-check-input">
+        <label for="terms_and_conditions" class="form-check-label">Acepto los términos y condiciones</label>
+      </div>
+
+      <!-- Botón para enviar el formulario -->
+      <button type="submit" class="btn btn-primary">Crear Reservación</button>
+    </form>
+  </div>
+{% endblock %}

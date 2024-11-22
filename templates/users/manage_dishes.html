@@ -1,22 +1,33 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Administrar Platillos
+Administrar Platillos y Reservas
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5" id="admin-container">
     <div class="card shadow-sm p-4">
-    <h1 class="text-center mb-4">Administrar Platillos</h1>
-    <ul class="list-unstyled text-center">
-        <li class="mb-3">
-            <a href="{{ url_for('admin.view_dishes') }}" class="btn btn-primary btn-lg px-4">
-                <i class="fas fa-eye"></i> Ver Platillos
-            </a>
-            <a href="{{ url_for('admin.add_dish') }}" class="btn btn-success btn-lg px-4">
-                <i class="fas fa-plus"></i> Agregar Platillo
-            </a>
-        </li>
-    </ul>
+        <h1 class="text-center mb-4">Administrar Platillos y Reservas</h1>
+        <ul class="list-unstyled text-center">
+            <li class="mb-3">
+                <a href="{{ url_for('admin.view_dishes') }}" class="btn btn-primary btn-lg px-4">
+                    <i class="fas fa-eye"></i> Ver Platillos
+                </a>
+            </li>
+            <!-- Botón para ver reservas -->
+            <li class="mb-3">
+                <a href="{{ url_for('admin_routes.view_reservations') }}" class="btn btn-success btn-lg px-4">
+                    <i class="fas fa-calendar-check"></i> Ver Reservas
+                </a>
+            </li>
+
+            <!-- Botón para gestionar mesas -->
+            <li class="mb-3">
+                <a href="{{ url_for('admin_routes.manage_tables') }}" class="btn btn-warning btn-lg px-4">
+                    <i class="fas fa-cogs"></i> Gestionar Mesas
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 {% endblock %}

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Editar Reserva</h2>
+    <form action="{{ url_for('reservations.edit_reservation', reservation_id=reservation.reservation_id) }}" method="POST">
+        <div class="mb-3">
+            <label for="reservation_date" class="form-label">Fecha y Hora</label>
+            <input type="datetime-local" id="reservation_date" name="reservation_date" class="form-control" value="{{ reservation.reservation_date.strftime('%Y-%m-%dT%H:%M:%S') }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="num_people" class="form-label">Número de Personas</label>
+            <input type="number" id="num_people" name="num_people" class="form-control" value="{{ reservation.num_people }}" min="1" required>
+        </div>
+        <div class="mb-3">
+            <label for="table_type" class="form-label">Tipo de Mesa</label>
+            <select id="table_type" name="table_type" class="form-select" required>
+                <option value="interior" {% if reservation.table_type == "interior" %}selected{% endif %}>Interior</option>
+                <option value="exterior" {% if reservation.table_type == "exterior" %}selected{% endif %}>Exterior</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="special_requests" class="form-label">Comentarios Especiales (Opcional)</label>
+            <textarea id="special_requests" name="special_requests" class="form-control">{{ reservation.special_requests }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+        <a href="{{ url_for('reservations.user_reservations') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

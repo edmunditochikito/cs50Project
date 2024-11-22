@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Mis Reservas</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Número de Personas</th>
+                <th>Tipo de Mesa</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ reservation.reservation_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ reservation.reservation_date.strftime('%H:%M:%S') }}</td>
+                <td>{{ reservation.num_people }}</td>
+                <td>{{ reservation.table_type }}</td>
+                <td>
+                    <a href="{{ url_for('reservations.edit_reservation_page', reservation_id=reservation.reservation_id) }}" class="btn btn-primary btn-sm">Editar</a>
+                    <form action="{{ url_for('reservations.delete_reservation', reservation_id=reservation.reservation_id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center">No tienes reservas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('reservations.add_reservation_page') }}" class="btn btn-success">Agregar Reserva</a>
+</div>
+{% endblock %}

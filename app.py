@@ -1,13 +1,13 @@
 from flask import Flask
-from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
 from config import Config
+from flask_jwt_extended import verify_jwt_in_request,get_jwt_identity
+from config import jwt,db
 from routes.index import index
 from routes.users import user
 from routes.dish import admin
+from routes.admin import admin_bp
 from routes.profile import profile_bp
 from routes.categories import category
-from config import jwt,db
-from flask_jwt_extended import verify_jwt_in_request,get_jwt_identity
 from routes.reservations import reservations_bp
 
 
@@ -24,8 +24,9 @@ app.register_blueprint(index)
 app.register_blueprint(user)
 app.register_blueprint(admin)
 app.register_blueprint(profile_bp)
-app.register_blueprint(reservations_bp)
+app.register_blueprint(reservations_bp, url_prefix='/reservations')
 app.register_blueprint(category)
+app.register_blueprint(admin_bp)
 
 
 @app.context_processor

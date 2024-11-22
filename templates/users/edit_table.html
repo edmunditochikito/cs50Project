@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Editar Mesa</h1>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="code">Código de la mesa</label>
+        <input type="text" class="form-control" id="code" name="code" value="{{ table.code }}" required>
+    </div>
+    <div class="form-group">
+        <label for="capacity">Capacidad</label>
+        <input type="number" class="form-control" id="capacity" name="capacity" value="{{ table.capacity }}" required>
+    </div>
+    <div class="form-group">
+        <label for="type">Tipo de mesa</label>
+        <select class="form-control" id="type" name="type" required>
+            <option value="interior" {% if table.type == 'interior' %}selected{% endif %}>Interior</option>
+            <option value="exterior" {% if table.type == 'exterior' %}selected{% endif %}>Exterior</option>
+        </select>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="availabillity" name="availabillity" {% if table.availabillity %}checked{% endif %}>
+        <label class="form-check-label" for="availabillity">Disponible</label>
+    </div>
+    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+    <a href="{{ url_for('reservations.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

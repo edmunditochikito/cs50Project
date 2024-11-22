@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Dashboard de Administración</h1>
+
+<!-- Mostrar las reservaciones -->
+<h2>Reservaciones</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Comensales</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reservation in reservations %}
+        <tr>
+            <td>{{ reservation.id }}</td>
+            <td>{{ reservation.user_id.name }}</td>
+            <td>{{ reservation.reservation_date }}</td>
+            <td>{{ reservation.num_people }}</td>
+            <td>
+                <a href="{{ url_for('reservations.cancel_reservation', reservation_id=reservation.id) }}" class="btn btn-danger">Cancelar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Mostrar las mesas -->
+<h2>Mesas</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Código</th>
+            <th>Capacidad</th>
+            <th>Tipo</th>
+            <th>Disponibilidad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for table in tables %}
+        <tr>
+            <td>{{ table.id }}</td>
+            <td>{{ table.code }}</td>
+            <td>{{ table.capacity }}</td>
+            <td>{{ table.type }}</td>
+            <td>{{ 'Disponible' if table.availabillity else 'No Disponible' }}</td>
+            <td>
+                <a href="{{ url_for('reservations.edit_table', table_id=table.id) }}" class="btn btn-primary">Editar</a>
+                {% if table.availabillity %}
+                <a href="{{ url_for('reservations.deactivate_table', table_id=table.id) }}" class="btn btn-warning">Desactivar</a>
+                {% else %}
+                <a href="{{ url_for('reservations.deactivate_table', table_id=table.id) }}" class="btn btn-success">Activar</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
