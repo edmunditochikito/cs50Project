@@ -24,7 +24,7 @@ def view_dishes():
     """
     Ruta para listar todos los platillos
     """
-    dishes = Dish.get_all()  # Método definido en el modelo
+    dishes = Dish.get_all()  
     return render_template('users/view_dishes.html', dishes=dishes)
 
 # Ruta para agregar un platillo
@@ -39,10 +39,16 @@ def add_dish():
         description = request.form.get("description")
         category = request.form.get("categories_id")
         image = request.files.get("image")
-        print(image)
-        print(request.form)
+
         
-        # Validación del archivo
+        dish_exist=db.session.execute(
+            db.select(Dish).filter(Dish.name==name)
+        ).scalars().first()
+        if dish_exist:
+            return jsonify({"message":"el platillo ya existe en la base de datos","status":"error"})
+            
+        
+       
         if image and allowed_file(image.filename):
             filename = secure_filename(image.filename)
             # Crear el directorio si no existe
@@ -128,3 +134,14 @@ def delete_dish(dish_id):
     else:
         flash("El platillo no existe", "danger")
     return redirect(url_for('admin.view_dishes'))
+
+@admin.route("/getDishes",methods=["GET"])
+def getDishes():
+    
+    dishes = db.session.execute(
+        db.select(Dish)
+    ).scalars().all()
+    print(dishes)
+    dishes=[{"name":dish.name,"price":dish.price,"description":dish.description,"image":dish.image} for dish in dishes]
+    
+    return jsonify({"data":dishes})

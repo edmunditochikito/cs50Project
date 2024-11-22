@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", async (e) => {
   let form = document.querySelector("form");
   let textarea = document.querySelector("textarea");
 
-
   let inputs = document.querySelectorAll("input");
   inputs.forEach((input) => {
     input.addEventListener("blur", valid);
@@ -22,36 +21,44 @@ document.addEventListener("DOMContentLoaded", async (e) => {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-  
+
     let invalidFields = form.querySelectorAll(".is-invalid");
     if (invalidFields.length > 0) {
       invalidFields[0].focus();
       return;
     }
-  
-    let formData = new FormData(); 
-  
+
+    let formData = new FormData();
+
     inputs.forEach((input) => {
       if (input.type === "file") {
-        formData.append(input.id, input.files[0]); 
+        formData.append(input.id, input.files[0]);
       } else {
-        formData.append(input.id, input.value); 
+        formData.append(input.id, input.value);
       }
     });
-  
-    formData.append(textarea.id, textarea.value); 
+
+    formData.append(textarea.id, textarea.value);
     formData.append("categories_id", select.value);
-  
+
     try {
       let response = await axios.post("/admin/add_dish", formData, {
         headers: {
-          "Content-Type": "multipart/form-data", 
+          "Content-Type": "multipart/form-data",
         },
       });
-  
-      console.log(response.data); 
+      let data = response.data;
+      toastMessage(data.status, data.message);
+      if (data.status == "success") {
+        e.target.reset();
+        let form_inputs_=form.querySelectorAll(".is-valid")
+        form_inputs_.forEach((input) => {
+          input.classList.remove("is-valid");
+          if (input.id == "name") input.focus();
+        });
+      }
     } catch (err) {
-      console.error(err); 
+      console.error(err);
     }
   });
 });

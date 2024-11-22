@@ -10,33 +10,19 @@ Platillos del Menú
     <a href="{{ url_for('admin.add_dish') }}" class="btn btn-success mb-3">Agregar Platillo</a>
 
     <!-- Tabla para mostrar los platillos -->
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for dish in dishes %}
-            <tr>
-                <td>{{ dish.name }}</td>
-                <td>{{ dish.description }}</td>
-                <td>${{ dish.price }}</td>
-                <td>
-                    <!-- Botón Editar -->
-                    <a href="{{ url_for('admin.edit_dish', dish_id=dish.id) }}" class="btn btn-warning btn-sm">Editar</a>
-                    
-                    <!-- Botón Eliminar -->
-                    <form action="{{ url_for('admin.delete_dish', dish_id=dish.id) }}" method="POST" style="display:inline;">
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <table
+    class="table table-hover table-bordered table-responsive table-striped nowrap"
+    id="Tabla"
+    style="width: 100%"
+  >
+    <thead>
+      <tr>
+        <th class="text-center">Nombre</th>
+        <th class="text-center">Descripción</th>
+        <th class="text-center">Precio</th>
+      </tr>
+    </thead>
+  </table>
 </div>
+<script type="module" src="{{ url_for('static', filename='js/users/view_dishes.js') }}"></script>
 {% endblock %}
