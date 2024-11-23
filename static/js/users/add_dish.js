@@ -1,10 +1,13 @@
-import { toastMessage, showAlert } from "../utils.js";
+import { toastMessage, showAlert,getCookie} from "../utils.js";
+const csrfToken = getCookie("csrf_access_token")
 
 // Función para inicializar el formulario
 export function initializeAddDishForm() {
   document.addEventListener("DOMContentLoaded", async (e) => {
     let select = document.querySelector("select");
-    let response = await axios.post("/categories");
+    let response = await axios.post("/categories",{},{ headers: {
+      "X-CSRF-TOKEN":csrfToken
+    }},);
     let data = response.data;
     data.forEach((category) => {
       let option = document.createElement("option");
@@ -45,9 +48,11 @@ export function initializeAddDishForm() {
       formData.append("categories_id", select.value);
 
       try {
+        const csrfToken = getCookie("csrf_access_token")
         let response = await axios.post("/admin/add_dish", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            "X-CSRF-TOKEN":csrfToken
           },
         });
         let data = response.data;

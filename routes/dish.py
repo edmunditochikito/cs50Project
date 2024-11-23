@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash,jsonify
+from flask_jwt_extended import jwt_required,get_jwt_identity
 from werkzeug.utils import secure_filename  
 import os
 from models.dish import Dish
@@ -14,25 +15,35 @@ def allowed_file(filename):
 
 
 @admin.route('/manage', methods=['GET'])
+@jwt_required()
 def manage_dishes():
-
-    return render_template('users/manage_dishes.html')
+    user=get_jwt_identity()
+    if user["role"]=="administrator":
+        return render_template('users/manage_dishes.html')
+    else:
+        return redirect("/")
 
 # Ruta para ver todos los platillos
 @admin.route('/view_dishes', methods=['GET'])
+@jwt_required()
 def view_dishes():
     """
     Ruta para listar todos los platillos
     """
+    user=get_jwt_identity()
     dishes = Dish.get_all()  
-    return render_template('users/view_dishes.html', dishes=dishes)
+    if user["role"]=="administrator":
+        return render_template('users/view_dishes.html', dishes=dishes)
+    else: return redirect("/")
 
 # Ruta para agregar un platillo
 @admin.route('/add_dish', methods=['GET', 'POST'])
+@jwt_required()
 def add_dish():
     """
     Ruta para agregar un nuevo platillo
     """
+    user=get_jwt_identity()
     if request.method=="POST":
         name = request.form.get("name")
         price = request.form.get("price")
@@ -73,10 +84,13 @@ def add_dish():
         else:
             return jsonify({"message": "Archivo no permitido o faltante","status":"error"}),
     else:
-        return render_template('users/add_dish.html')
+        if user["role"]=="administrator":
+            return render_template('users/add_dish.html')
+        else: return redirect("/")
 
 # Ruta para editar un platillo
 @admin.route('/updateDish/<id>', methods=[ 'POST'])
+@jwt_required()
 def edit_dish(id):
     """
     Ruta para editar un platillo existente
@@ -108,6 +122,7 @@ def edit_dish(id):
 
 # Ruta para eliminar un platillo
 @admin.route('/deleteDish/<id>', methods=['POST'])
+@jwt_required()
 def delete_dish(id):
     """
     Ruta para eliminar un platillo
@@ -117,6 +132,8 @@ def delete_dish(id):
         if not dish:
             return jsonify({"status":"error","message":"no hemos podido eliminar el platillo ya que no existe","title":"platillo no encontrado"})
         name=dish.name
+        if dish.image and os.path.exists(os.path.join(UPLOAD_FOLDER, dish.image)):
+            os.remove(os.path.join(UPLOAD_FOLDER, dish.image))
         dish.delete()
         return jsonify({"status":"success","message":f"el platillo {name} ha sido eliminado exitosamente","title":"platillo eliminado correctamente"})
     except Exception as e:
@@ -124,6 +141,7 @@ def delete_dish(id):
     
 
 @admin.route("/getDishes",methods=["GET"])
+@jwt_required()
 def getDishes():
     
     dishes = db.session.execute(
@@ -135,6 +153,7 @@ def getDishes():
     return jsonify({"data":dishes})
 
 @admin.route("/getDish",methods=["POST"])
+@jwt_required()
 def getDish():
     data=request.json
     id=data["id"]

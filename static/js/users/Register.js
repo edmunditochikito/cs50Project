@@ -33,9 +33,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
             input.classList.remove("is-valid")
             if(input.id=="name") input.focus()
           });
-          // setTimeout(() => {
-          //   window.location.href = "/Login";
-          // }, 2000);
+          setTimeout(() => {
+            window.location.href = "/Login";
+          }, 2000);
         }
         
         

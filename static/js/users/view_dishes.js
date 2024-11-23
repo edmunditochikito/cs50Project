@@ -1,9 +1,11 @@
-import { createDatatable,updateDatatable } from "../utils.js";
+import { createDatatable,updateDatatable,getCookie } from "../utils.js";
 import { valid } from "./add_dish.js";
-
+const csrfToken = getCookie("csrf_access_token")
 document.addEventListener("DOMContentLoaded", async (e) => {
   let select = document.querySelector("select");
-  let response = await axios.post("/categories");
+  let response = await axios.post("/categories",{},{ headers: {
+    "X-CSRF-TOKEN":csrfToken
+  }},);
   let data = response.data;
   data.forEach((category) => {
     let option = document.createElement("option");
@@ -17,6 +19,7 @@ document.addEventListener("DOMContentLoaded", async (e) => {
     ajaxUrl: {
       url: "/admin/getDishes",
       type: "GET",
+      
     },
     searchBuilder: true,
     buttons: true,
@@ -60,7 +63,10 @@ window.openModal = async (data) => {
   modalElement.addEventListener("hidden.bs.modal", handleModalClose);
 
   // Obtén los datos y muestra el modal
-  let response = await axios.post("/admin/getDish", { id: data });
+  let response = await axios.post("/admin/getDish",{ "id": data },
+   { headers: {
+      "X-CSRF-TOKEN":csrfToken
+    }},);
   let responseData = response.data;
   populateModal(form, responseData);
 
@@ -131,7 +137,9 @@ async function updateDish (id)  {
 
   try {
     const formData = new FormData(document.querySelector("form"));
-    const response = await axios.post("/admin/updateDish/"+id,formData);
+    const response = await axios.post("/admin/updateDish/"+id,formData,{ headers: {
+      "X-CSRF-TOKEN":csrfToken
+    }},);
     const data=response.data
     console.log(data)
 
@@ -178,7 +186,9 @@ window.sweetConfirmDelete = async (id) => {
 
 async function deleteDish(id){
   try {
-    let response=await axios.post("/admin/deleteDish/"+id)
+    let response=await axios.post("/admin/deleteDish/"+id,{},{ headers: {
+      "X-CSRF-TOKEN":csrfToken
+    }},)
     let data=response.data
     console.log(response)
     
