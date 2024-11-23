@@ -2,33 +2,39 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Agregar Reserva</h2>
+    <h2>Hacer una nueva reserva</h2>
+
     <form action="{{ url_for('reservations.make_reservation') }}" method="POST">
-        <div class="mb-3">
-            <label for="reservation_date" class="form-label">Fecha y Hora</label>
-            <input type="datetime-local" id="reservation_date" name="reservation_date" class="form-control" required>
+        <div class="form-group">
+            <label for="reservation_date">Fecha y Hora</label>
+            <input type="datetime-local" class="form-control" id="reservation_date" name="reservation_date" required>
         </div>
-        <div class="mb-3">
-            <label for="num_people" class="form-label">Número de Personas</label>
-            <input type="number" id="num_people" name="num_people" class="form-control" min="1" required>
+        <div class="form-group">
+            <label for="num_people">Número de Personas</label>
+            <input type="number" class="form-control" id="num_people" name="num_people" required>
         </div>
-        <div class="mb-3">
-            <label for="table_type" class="form-label">Tipo de Mesa</label>
-            <select id="table_type" name="table_type" class="form-select" required>
-                <option value="interior">Interior</option>
-                <option value="exterior">Exterior</option>
+        <div class="form-group">
+            <label for="table_id">Número de Mesa</label>
+            <select class="form-control" id="table_id" name="table_id" required>
+                {% for table in available_tables %}
+                    {% if table.availabillity %}
+                        <option value="{{ table.id }}">{{ table.code }} - Capacidad: {{ table.capacity }} personas</option>
+                    {% endif %}
+                {% else %}
+                    <option disabled>No hay mesas disponibles</option>
+                {% endfor %}
             </select>
         </div>
-        <div class="mb-3">
-            <label for="special_requests" class="form-label">Comentarios Especiales (Opcional)</label>
-            <textarea id="special_requests" name="special_requests" class="form-control"></textarea>
+        <div class="form-group">
+            <label for="special_requests">Solicitudes Especiales</label>
+            <textarea class="form-control" id="special_requests" name="special_requests"></textarea>
         </div>
-        <div class="mb-3">
-            <input type="checkbox" id="terms" name="terms_and_conditions_accepted" required>
-            <label for="terms">Acepto los términos y condiciones</label>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="terms_and_conditions_accepted" required> Acepto los términos y condiciones
+            </label>
         </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <a href="{{ url_for('reservations.user_reservations') }}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-success">Reservar</button>
     </form>
 </div>
 {% endblock %}

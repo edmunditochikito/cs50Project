@@ -24,7 +24,10 @@
                 <td>{{ reservation.num_people }}</td>
                 <td>{{ reservation.table_type }}</td>
                 <td>
+                    <!-- Enlace para editar la reserva -->
                     <a href="{{ url_for('reservations.edit_reservation_page', reservation_id=reservation.reservation_id) }}" class="btn btn-primary btn-sm">Editar</a>
+
+                    <!-- Formulario para eliminar la reserva -->
                     <form action="{{ url_for('reservations.delete_reservation', reservation_id=reservation.reservation_id) }}" method="POST" class="d-inline">
                         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                     </form>
@@ -38,6 +41,11 @@
         </tbody>
     </table>
 
+    <!-- Botón para agregar una nueva reserva -->
     <a href="{{ url_for('reservations.add_reservation_page') }}" class="btn btn-success">Agregar Reserva</a>
+    <script
+    type="module"
+    src="{{ url_for('static', filename='js/users/checkAuth.js') }}"
+  ></script>
 </div>
 {% endblock %}

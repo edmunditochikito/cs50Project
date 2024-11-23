@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         } else {
             // Si está autenticado, permite la navegación normal
-            window.location.href = '/reservations';
+            window.location.href = '/users/user_reservations';
         }
     });
 });
