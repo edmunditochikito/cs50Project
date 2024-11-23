@@ -71,7 +71,7 @@ export function initializeAddDishForm() {
 export function valid(e) {
   if (e.target.id == "price") {
     let message = "";
-    if (!/^\d{1,4}$/.test(e.target.value)) {
+    if (!/^\d{1,4}(\.\d{1,2})?$/.test(e.target.value)) {
       
       message = "Cantidad invalida";
     }
