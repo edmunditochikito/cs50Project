@@ -107,5 +107,5 @@ def deactivate_table(table_id):
     except Exception as e:
         flash(f"Error al desactivar la mesa: {e}", "danger")
 
-    return redirect(url_for("admin_routes.manage_tables"))  # Corregir redirección
+    return redirect(url_for("admin_routes.manage_tables"))  
 
