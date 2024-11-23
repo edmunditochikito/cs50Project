@@ -112,7 +112,7 @@ def edit_dish(id):
         dish.categories_id = category
         
         dish.save()
-        return jsonify({"title":"Platillo actualizado correctamente","status":"success","message":f"el platillo {dish.name} ha sido actualizado con exito"})
+        return jsonify({"title":"Platillo actualizado correctamente","status":"success","message":f"el platillo {name} ha sido actualizado con exito"})
     except Exception as e:
         return jsonify({"title":f"Ha ocurrido un error","status":"error","message":f"Error al actualizar el platillo {name}"})
  
@@ -137,7 +137,7 @@ def delete_dish(id):
         dish.delete()
         return jsonify({"status":"success","message":f"el platillo {name} ha sido eliminado exitosamente","title":"platillo eliminado correctamente"})
     except Exception as e:
-        return jsonify({"status":"error","message":""})
+        return jsonify({"status":"error","message":"Error","title":"error"})
     
 
 @admin.route("/getDishes",methods=["GET"])

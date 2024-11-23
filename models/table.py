@@ -9,7 +9,7 @@ class Table (db.Model):
     type = db.Column(db.Enum("interior","exterior",name='type_enum'),nullable=False)
     availabillity = db.Column(db.Boolean(), default=True, nullable=False)
 
-    def __init__(self, code, capacity, type,availabillity):
+    def __init__(self, code, capacity, type,availabillity=True):
         self.code = code
         self.capacity = capacity
         self.type = type

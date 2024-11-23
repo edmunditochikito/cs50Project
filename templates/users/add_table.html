@@ -5,7 +5,7 @@ Agregar Mesa
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 mb-3 ">
     <h1 class="text-center mb-4">Agregar Nueva Mesa</h1>
     <form method="POST">
         <div class="form-group">
@@ -23,11 +23,8 @@ Agregar Mesa
                 <option value="exterior">Exterior</option>
             </select>
         </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="availability" name="availability">
-            <label class="form-check-label" for="availability">Disponible</label>
-        </div>
         <button type="submit" class="btn btn-primary mt-3">Agregar Mesa</button>
     </form>
 </div>
+<script type="module" src="{{url_for('static', filename='js/users/add_table.js')}}"></script>
 {% endblock %}

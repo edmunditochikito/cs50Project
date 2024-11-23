@@ -8,31 +8,7 @@ from config import db
 # Crear el Blueprint
 admin_bp = Blueprint("admin_routes", __name__, url_prefix="/admin")
 
-# Ruta para verificar autenticación
-@admin_bp.route("/check-auth", methods=["GET"])
-def check_auth():
-    try:
-        user_identity = get_jwt_identity()
-        user = User.query.get(user_identity["id"])
-
-        if user is None:
-            return jsonify({"message": "Usuario no encontrado"}), 404
-
-        if user.role != "administrator":
-            return jsonify({"message": "Acceso denegado: No eres administrador"}), 403
-
-        return redirect(url_for('admin_routes.manage_dishes'))  # Redirigir si es administrador
-
-    except Exception as e:
-        return jsonify({"message": f"Error: {str(e)}"}), 500
-
-
 # Dashboard del administrador
-@admin_bp.route("/dashboard", methods=["GET"])
-def dashboard():
-    reservations = Reservation.query.all()
-    tables = Table.query.all()
-    return render_template("users/dashboard.html", reservations=reservations, tables=tables)
 
 # Ver reservas
 @admin_bp.route("/view-reservations", methods=["GET"])
@@ -42,70 +18,86 @@ def view_reservations():
 
 # Gestionar mesas (agregar, editar, eliminar)
 @admin_bp.route("/manage-tables", methods=["GET"])
+@jwt_required()
 def manage_tables():
+    user=get_jwt_identity()
     tables = Table.query.all()
-    return render_template("users/manage_tables.html")
+    if user["role"]=="administrator":
+        return render_template("users/manage_tables.html")
+    else: return redirect("/")
+ 
 
 # Agregar mesa
 @admin_bp.route("/add-table", methods=["GET", "POST"])
+@jwt_required()
 def add_table():
+    user=get_jwt_identity()
     if request.method == "POST":
         try:
-            new_table = Table(
-                code=request.form.get("code"),
-                capacity=request.form.get("capacity"),
-                type=request.form.get("type"),
-                availabillity="availabillity" in request.form
-            )
-            db.session.add(new_table)
-            db.session.commit()
-            flash("Mesa agregada exitosamente.", "success")
-            return redirect(url_for("admin_routes.manage_tables"))  # Redirigir al gestionar mesas
-
+            data=request.json
+            new_table=Table(code=data["code"],capacity=data["capacity"],type=data["type"])
+            new_table.save()
+            print(new_table.serialize())
+            return jsonify({"message":"se agrego una nueva mesa con exito","status":"success"})
         except Exception as e:
-            db.session.rollback()
-            flash(f"Error al agregar la mesa: {e}", "danger")
-            return redirect(url_for("admin_routes.add_table"))
-
-    return render_template("users/add_table.html")
+           
+            return jsonify({"message":"error al agregar la mesa","status":"error"})
+    else:
+       if user["role"]=="administrator":
+           return render_template('users/add_table.html')
+       else: 
+           return redirect("/")
 
 # Editar mesa
-@admin_bp.route("/edit-table/<int:table_id>", methods=["GET", "POST"])
-def edit_table(table_id):
-    table = Table.query.get(table_id)
-    if not table:
-        flash("Mesa no encontrada.", "danger")
-        return redirect(url_for("admin_routes.manage_tables"))  # Corregir el nombre del endpoint
+@admin_bp.route("/updateTable/<id>", methods=["GET", "POST"])
+def updateTable(id):
+    try:
+        table=Table.query.get(id)
+        if not table:
+            return jsonify({"message":"la mesa no existe","status":"error"})
+        code = request.form.get("code")
+        capacity = request.form.get("capacity")
+        type = request.form.get("type")
+        availabillity = request.form.get("availabillity", "").strip().lower() in ["true", "1"]
+        
+        table.code = code
+        table.capacity = capacity
+        table.type = type
+        table.availabillity = availabillity
+        
+        table.save()
+        
+        return jsonify({"title":"Mesa actualizada correctamente","status":"success","message":f"la mesa con el codigo {code} ha sido actualizada con exito"})
+    except Exception as e:
+        return jsonify({"title":f"Ha ocurrido un error","status":"error","message":f"Error al actualizar la mesa con el codigo {code},{e}"})
 
-    if request.method == "POST":
-        try:
-            table.code = request.form.get("code")
-            table.capacity = request.form.get("capacity")
-            table.type = request.form.get("type")
-            table.availabillity = "availabillity" in request.form
-            db.session.commit()
-            flash("Mesa editada exitosamente.", "success")
-            return redirect(url_for("admin_routes.manage_tables"))  # Redirigir al gestionar mesas
-        except Exception as e:
-            db.session.rollback()
-            flash(f"Error al editar la mesa: {e}", "danger")
-            return redirect(url_for("admin_routes.edit_table", table_id=table_id))
-
-    return render_template("users/edit_table.html", table=table)
 
 # Ruta para desactivar mesas
-@admin_bp.route("/deactivate-table/<int:table_id>", methods=["POST"])
-def deactivate_table(table_id):
-    table = Table.query.get(table_id)
-    if not table:
-        flash("Mesa no encontrada.", "danger")
-        return redirect(url_for("admin_routes.manage_tables"))  # Redirigir correctamente
-
+@admin_bp.route("/deactivate-table/<id>", methods=["POST"])
+def deactivate_table(id):
     try:
-        table.deactivate()  # Asumiendo que tienes un método deactivate() en tu modelo Table
-        flash("Mesa desactivada exitosamente.", "success")
+        table = Table.query.get(id)
+        if not table:
+            return jsonify({"status":"error","message":"no hemos podido desactivar la mesa ya que no existe","title":"mesa no encontrada"})
+        code = table.code
+        table.deactivate()
+        return jsonify({"status":"success","message":f"la mesa con el codigo {code} ha sido desactivada exitosamente","title":"mesa desactivada correctamente"})
     except Exception as e:
-        flash(f"Error al desactivar la mesa: {e}", "danger")
+        return jsonify({"status":"error","message":"Error","title":"error"})
+    
+@admin_bp.route("/getTables", methods=["GET"])
+def getTables():
+    tables=db.session.execute(
+        db.select(Table)
+    ).scalars().all()
+    tables=[table.serialize() for table in tables]
+    return jsonify({"data":tables})
 
-    return redirect(url_for("admin_routes.manage_tables"))  
+@admin_bp.route("/getTable/<id>", methods=["GET"])
+def getTable(id):
+    table=db.session.execute(
+        db.select(Table).filter(Table.id==id)
+    ).scalars().all()
+    table=[table.serialize() for table in table]
+    return jsonify(table[0])
 
