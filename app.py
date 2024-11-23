@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,redirect
 from config import Config
 from flask_jwt_extended import verify_jwt_in_request,get_jwt_identity
 from config import jwt,db
@@ -18,6 +18,19 @@ Config.ensure_upload_folder_exists()
 
 db.init_app(app)
 jwt.init_app(app)
+
+@jwt.invalid_token_loader
+def invalid_token_loader(error):
+    return redirect("/")
+
+@jwt.unauthorized_loader
+def unauthorized_loader(error):
+    return redirect("/")
+
+@jwt.expired_token_loader
+def expired_token_loader(jwt_header,jwt_data):
+    return redirect("/")
+
 
 
 app.register_blueprint(index)
