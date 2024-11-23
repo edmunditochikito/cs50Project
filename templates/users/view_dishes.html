@@ -1,16 +1,10 @@
-{% extends "layout.html" %}
-
-{% block title %}
-Platillos del Menú
-{% endblock %}
-
+{% extends "layout.html" %} {% block title %} Platillos del Menú {% endblock %}
 {% block content %}
 <div class="container mt-4">
-    <h1 class="text-center mb-4">Platillos del Menú</h1>
-    <a href="{{ url_for('admin.add_dish') }}" class="btn btn-success mb-3">Agregar Platillo</a>
+  <h1 class="text-center mb-4">Platillos del Menú</h1>
 
-    <!-- Tabla para mostrar los platillos -->
-    <table
+  <!-- Tabla para mostrar los platillos -->
+  <table
     class="table table-hover table-bordered table-responsive table-striped nowrap"
     id="Tabla"
     style="width: 100%"
@@ -23,6 +17,94 @@ Platillos del Menú
       </tr>
     </thead>
   </table>
+  <div class="d-flex justify-content-center">
+    <a href="{{ url_for('admin.add_dish') }}" class="btn btn-success mb-3"
+      >Agregar Platillo</a
+    >
+  </div>
+  <div
+    class="modal fade"
+    id="modalDetails"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar</h1>
+          <button
+            id="close"
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <form >
+            <div class="mb-3">
+              <label for="name" class="form-label">Nombre del Platillo</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="price" class="form-label">Precio</label>
+              <input
+                type="number"
+                class="form-control"
+                id="price"
+                name="price"
+                step="0.01"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Descripción</label>
+              <textarea
+                class="form-control"
+                id="description"
+                name="description"
+                rows="3"
+                required
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="category" class="form-label">Categoría</label>
+              <select name="category" class="form-control" id="category"></select>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <button
+                class="btn btn-secondary btn-danger me-2 text-light fw-bold"
+                data-bs-dismiss="modal"
+                id="cancel"
+                type="button"
+              >
+                <i class="bi bi-x-circle"></i> Cancelar
+              </button>
+              <button id="update" class="btn btn-success fw-bold btn-primary">
+                <i class="bi bi-plus-lg"></i> Actualizar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<script type="module" src="{{ url_for('static', filename='js/users/view_dishes.js') }}"></script>
+
+<script
+  type="module"
+  src="{{ url_for('static', filename='js/users/view_dishes.js') }}"
+></script>
+
 {% endblock %}

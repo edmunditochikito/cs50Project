@@ -76,64 +76,52 @@ def add_dish():
         return render_template('users/add_dish.html')
 
 # Ruta para editar un platillo
-@admin.route('/edit_dish/<int:dish_id>', methods=['GET', 'POST'])
-def edit_dish(dish_id):
+@admin.route('/updateDish/<id>', methods=[ 'POST'])
+def edit_dish(id):
     """
     Ruta para editar un platillo existente
     """
-    dish = Dish.query.get(dish_id)
-    if not dish:
-        flash("El platillo no existe", "danger")
-        return redirect(url_for('admin.view_dishes'))
-    
-    if request.method == 'POST':
-        # Obtener los datos del formulario
-        name = request.form.get('name')
-        price = request.form.get('price')
-        description = request.form.get('description')
-        category = request.form.get('category')
-        image = request.form.get('image')
-
-        # Validar campos requeridos
-        if not all([name, price, category]):
-            flash("Todos los campos obligatorios deben completarse", "danger")
-            return redirect(url_for('admin.edit_dish', dish_id=dish_id))
+    try:
+        dish = Dish.query.get(id)
+        print(dish)
+        if not dish:
+            return jsonify({"message":"el platillo no existe","status":"error"})
         
-        # Actualizar los datos del platillo
+        name = request.form.get("name")
+        price = request.form.get("price")
+        description = request.form.get("description")
+        category = request.form.get("category")
+        
         dish.name = name
         dish.price = price
         dish.description = description
         dish.categories_id = category
-        dish.image = image
+        
+        dish.save()
+        return jsonify({"title":"Platillo actualizado correctamente","status":"success","message":f"el platillo {dish.name} ha sido actualizado con exito"})
+    except Exception as e:
+        return jsonify({"title":f"Ha ocurrido un error","status":"error","message":f"Error al actualizar el platillo {name}"})
+ 
 
-        try:
-            dish.save()
-            flash("Platillo actualizado exitosamente", "success")
-            return redirect(url_for('admin.view_dishes'))
-        except Exception as e:
-            flash(f"Error al actualizar el platillo: {e}", "danger")
-            return redirect(url_for('admin.edit_dish', dish_id=dish_id))
-    
-    # Mostrar el formulario de edición con los datos actuales
-    return render_template('users/edit_dish.html', dish=dish)
+        
 
 
 # Ruta para eliminar un platillo
-@admin.route('/delete_dish/<int:dish_id>', methods=['POST'])
-def delete_dish(dish_id):
+@admin.route('/deleteDish/<id>', methods=['POST'])
+def delete_dish(id):
     """
     Ruta para eliminar un platillo
     """
-    dish = Dish.query.get(dish_id)
-    if dish:
-        try:
-            dish.delete()
-            flash("Platillo eliminado exitosamente", "success")
-        except Exception as e:
-            flash(f"Error al eliminar el platillo: {e}", "danger")
-    else:
-        flash("El platillo no existe", "danger")
-    return redirect(url_for('admin.view_dishes'))
+    try:
+        dish = Dish.query.get(id)
+        if not dish:
+            return jsonify({"status":"error","message":"no hemos podido eliminar el platillo ya que no existe","title":"platillo no encontrado"})
+        name=dish.name
+        dish.delete()
+        return jsonify({"status":"success","message":f"el platillo {name} ha sido eliminado exitosamente","title":"platillo eliminado correctamente"})
+    except Exception as e:
+        return jsonify({"status":"error","message":""})
+    
 
 @admin.route("/getDishes",methods=["GET"])
 def getDishes():
@@ -142,6 +130,18 @@ def getDishes():
         db.select(Dish)
     ).scalars().all()
     print(dishes)
-    dishes=[{"name":dish.name,"price":dish.price,"description":dish.description,"image":dish.image} for dish in dishes]
+    dishes=[{"id":dish.id,"name":dish.name,"price":dish.price,"description":dish.description,"image":dish.image} for dish in dishes]
     
     return jsonify({"data":dishes})
+
+@admin.route("/getDish",methods=["POST"])
+def getDish():
+    data=request.json
+    id=data["id"]
+    
+    dishes = db.session.execute(
+        db.select(Dish).filter(Dish.id==id)
+    ).scalars().all()
+    dishes=[{"id":dish.id,"name":dish.name,"price":dish.price,"description":dish.description,"category":dish.categories_id} for dish in dishes]
+    
+    return jsonify(dishes)
