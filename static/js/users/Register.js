@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
         let response = await axios.post("/Register",inputData);
         let data = response.data;
-        console.log(data)
         toastMessage(data.status,data.message)
        
         if(data.status=="success"){

@@ -121,6 +121,20 @@ export const createDatatable = (params) => {
   return newTable;
 };
 
+export async function updateDatatable(endpoint){
+  if (!$.fn.DataTable.isDataTable("#Tabla")) {
+    loadUsersTable({
+      id: "Tabla",
+      data: newData,
+      searchBuilder: true,
+      buttons: true,
+    });
+  } else {
+    const table = $("#Tabla").DataTable();
+    table.ajax.reload(null, false); 
+    table.ajax.url(endpoint).load();
+  }
+};
   // let generatedOtp = Math.floor(Math.random() * 10000).toString();
 
   // Email.send({
