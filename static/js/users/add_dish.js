@@ -93,7 +93,7 @@ export function valid(e) {
 
   if (e.target.id == "description") {
     let message = "";
-    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.,;!?'"-]{1,160}$/.test(e.target.value)) {
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.,;!?'"-]{1,250}$/.test(e.target.value)) {
       message = "Descripcion no valida";
     }
     showAlert(e.target, message);
