@@ -41,7 +41,7 @@ def add_table():
             return jsonify({"message":"se agrego una nueva mesa con exito","status":"success"})
         except Exception as e:
            
-            return jsonify({"message":"error al agregar la mesa","status":"error"})
+            return jsonify({"message":f"error al agregar la mesa","status":"error"})
     else:
        if user["role"]=="administrator":
            return render_template('users/add_table.html')

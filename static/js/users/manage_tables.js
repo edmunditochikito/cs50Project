@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async (e) => {
       targets: -1,
       data: null,
       render: function (data, type, row, meta) {
-        return `<button class="btn btn-sm btn-danger remove-btn" onclick="sweetConfirmDelete('${data.id}')"><i class="bi bi-trash"></i></button>
+        return `<button class="btn btn-sm btn-danger remove-btn" onclick="sweetConfirmDelete('${data.id}')"><i class="bi bi-ban"></i></button>
                 <button class="btn btn-sm btn-primary edit-btn" onclick="openModal('${data.id}')"><i class="bi bi-pencil"></i></button>`;
       },
     },
